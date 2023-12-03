@@ -44,6 +44,8 @@ abstract class GameAdapter : ApplicationAdapter() {
         spriteBatch.draw(texture, x, y)
     }
 
+    protected fun delta() = Gdx.graphics.deltaTime
+
     private fun escapeToQuitInDebug() {
         debug {
             Key.ESCAPE.ifKeyPressed {

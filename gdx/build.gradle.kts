@@ -10,9 +10,9 @@ repositories {
     mavenCentral()
     google()
     gradlePluginPortal()
-    maven(url="https://oss.sonatype.org/content/repositories/snapshots/")
-    maven(url="https://oss.sonatype.org/content/repositories/releases/")
-    maven(url="https://jitpack.io")
+    maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
+    maven(url = "https://oss.sonatype.org/content/repositories/releases/")
+    maven(url = "https://jitpack.io")
 }
 
 val gdxVersion = "1.12.1"
