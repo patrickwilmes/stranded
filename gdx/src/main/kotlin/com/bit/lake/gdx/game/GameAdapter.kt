@@ -2,11 +2,11 @@ package com.bit.lake.gdx.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Matrix4
 import com.bit.lake.gdx.debug.debug
 import com.bit.lake.gdx.debug.info
+import com.bit.lake.gdx.graphics.Texture
 import com.bit.lake.gdx.input.Key
 import com.bit.lake.gdx.input.ifKeyPressed
 
@@ -41,7 +41,7 @@ abstract class GameAdapter : ApplicationAdapter() {
     protected abstract fun initialize()
 
     protected fun draw(texture: Texture, x: Float, y: Float) {
-        spriteBatch.draw(texture, x, y)
+        spriteBatch.draw(texture.texture, x, y)
     }
 
     protected fun delta() = Gdx.graphics.deltaTime
