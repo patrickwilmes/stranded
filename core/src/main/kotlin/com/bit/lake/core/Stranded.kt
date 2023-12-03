@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Matrix4
 import com.bit.lake.gdx.game.GameAdapter
 import com.bit.lake.gdx.game.clearScreen
 import com.bit.lake.gdx.graphics.Camera
+import com.bit.lake.gdx.graphics.Graphics
 import com.bit.lake.gdx.graphics.TextureManager
 import com.bit.lake.gdx.input.Key
 import com.bit.lake.gdx.input.ifKeyPressed
@@ -13,11 +14,15 @@ class Stranded : GameAdapter() {
     private lateinit var block: Rectangle
     private lateinit var block2: Rectangle
 
-    override fun initialize() {
+    override fun initialize(graphics: Graphics) {
         TextureManager.loadTexture("GrassBlock.png")
         TextureManager.loadTexture("Dirt.png")
 
-        Camera.initialize(yDown = false, viewportWidth = 800f, viewportHeight = 600f)
+        Camera.initialize(
+            yDown = false,
+            viewportWidth = graphics.viewportWith,
+            viewportHeight = graphics.viewportHeight
+        )
 
         block = Rectangle(
             x = 800f / 2f - 64f / 2f,
