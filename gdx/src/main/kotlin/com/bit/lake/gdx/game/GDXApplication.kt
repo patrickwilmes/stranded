@@ -2,26 +2,23 @@ package com.bit.lake.gdx.game
 
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
-import com.bit.lake.gdx.debug.DebugOptions
+import com.bit.lake.gdx.debug.debug
 import com.bit.lake.gdx.debug.info
+import com.bit.lake.gdx.input.Key
+import com.bit.lake.gdx.input.ifKeyPressed
 
 abstract class GDXApplication : ApplicationAdapter() {
     override fun create() {
-        if (isDebug()) {
+        debug {
             info(this::class.java, "Debug mode enabled!")
-        } else {
-            info(this::class.java, "Debug mode disabled!")
         }
     }
 
     protected fun escapeToQuitInDebug() {
-        if (isDebug()) {
-            if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+        debug {
+            Key.ESCAPE.ifKeyPressed {
                 Gdx.app.exit()
             }
         }
     }
-
-    private fun isDebug(): Boolean = DebugOptions.isDebugModeEnabled()
 }
