@@ -7,12 +7,19 @@ import com.bit.lake.gdx.debug.info
 import com.bit.lake.gdx.input.Key
 import com.bit.lake.gdx.input.ifKeyPressed
 
-abstract class GDXApplication : ApplicationAdapter() {
+abstract class GameAdapter : ApplicationAdapter() {
     override fun create() {
         debug {
             info(this::class.java, "Debug mode enabled!")
         }
     }
+
+    override fun render() {
+        escapeToQuitInDebug()
+        renderScene()
+    }
+
+    protected abstract fun renderScene()
 
     protected fun escapeToQuitInDebug() {
         debug {
