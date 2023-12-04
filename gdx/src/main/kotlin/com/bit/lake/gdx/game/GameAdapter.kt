@@ -3,13 +3,12 @@ package com.bit.lake.gdx.game
 import com.badlogic.gdx.ApplicationAdapter
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Matrix4
 import com.bit.lake.gdx.debug.debug
 import com.bit.lake.gdx.debug.info
 import com.bit.lake.gdx.entity.DynamicEntity
 import com.bit.lake.gdx.entity.Entity
+import com.bit.lake.gdx.graphics.Camera
 import com.bit.lake.gdx.graphics.Graphics
-import com.bit.lake.gdx.graphics.Texture
 import com.bit.lake.gdx.input.Key
 import com.bit.lake.gdx.input.ifKeyPressed
 
@@ -23,18 +22,25 @@ abstract class GameAdapter : ApplicationAdapter() {
         }
         spriteBatch = SpriteBatch()
 
-        initialize(createGraphicsWrapper())
+        with(createGraphicsWrapper()) {
+            Camera.initialize(
+                yDown = false,
+                viewportWidth = viewportWith,
+                viewportHeight = viewportHeight
+            )
+
+            initialize(this)
+        }
     }
 
     override fun render() {
         escapeToQuitInDebug()
+        Camera.update()
         onUpdate()
         spriteBatch.begin()
-        handleSprites {
-            spriteBatch.projectionMatrix = it
-            entities.forEach { entity ->
-                entity.render(spriteBatch)
-            }
+        spriteBatch.projectionMatrix = Camera.combined()
+        entities.forEach { entity ->
+            entity.render(spriteBatch)
         }
         spriteBatch.end()
         entities.filterIsInstance<DynamicEntity>()
@@ -48,7 +54,6 @@ abstract class GameAdapter : ApplicationAdapter() {
     }
 
     protected abstract fun onUpdate()
-    protected abstract fun handleSprites(projectionMatrixFunc: (Matrix4) -> Unit)
     protected abstract fun initialize(graphics: Graphics)
 
     protected fun registerEntity(entity: Entity) {
