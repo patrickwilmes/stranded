@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Matrix4
 import com.bit.lake.gdx.debug.debug
 import com.bit.lake.gdx.debug.info
+import com.bit.lake.gdx.entity.DynamicEntity
+import com.bit.lake.gdx.entity.Entity
 import com.bit.lake.gdx.graphics.Graphics
 import com.bit.lake.gdx.graphics.Texture
 import com.bit.lake.gdx.input.Key
@@ -13,6 +15,7 @@ import com.bit.lake.gdx.input.ifKeyPressed
 
 abstract class GameAdapter : ApplicationAdapter() {
     private lateinit var spriteBatch: SpriteBatch
+    private val entities = mutableListOf<Entity>()
 
     override fun create() {
         debug {
@@ -29,8 +32,15 @@ abstract class GameAdapter : ApplicationAdapter() {
         spriteBatch.begin()
         handleSprites {
             spriteBatch.projectionMatrix = it
+            entities.forEach { entity ->
+                entity.render(spriteBatch)
+            }
         }
         spriteBatch.end()
+        entities.filterIsInstance<DynamicEntity>()
+            .forEach {
+                it.update(delta())
+            }
     }
 
     override fun dispose() {
@@ -46,6 +56,10 @@ abstract class GameAdapter : ApplicationAdapter() {
     }
 
     protected fun delta() = Gdx.graphics.deltaTime
+
+    protected fun registerEntity(entity: Entity) {
+        entities.add(entity)
+    }
 
     private fun escapeToQuitInDebug() {
         debug {

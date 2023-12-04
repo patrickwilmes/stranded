@@ -1,41 +1,45 @@
 package com.bit.lake.core
 
 import com.badlogic.gdx.math.Matrix4
+import com.bit.lake.gdx.entity.DynamicEntity
+import com.bit.lake.gdx.entity.StaticEntity
 import com.bit.lake.gdx.game.GameAdapter
 import com.bit.lake.gdx.game.clearScreen
 import com.bit.lake.gdx.graphics.Camera
 import com.bit.lake.gdx.graphics.Graphics
 import com.bit.lake.gdx.graphics.TextureManager
 import com.bit.lake.gdx.input.Key
-import com.bit.lake.gdx.input.ifKeyPressed
 import com.bit.lake.gdx.types.Rectangle
 
+class GrassBlock(x: Float, y: Float) :
+    StaticEntity("grass_block", Rectangle(x, y, 64f, 64f), "GrassBlock.png")
+
+class MovingDirt(x: Float, y: Float) :
+    DynamicEntity("dirt_block", Rectangle(x, y, 64f, 64f), "GrassBlock.png") {
+    init {
+        registerKeyAction(Key.LEFT) { delta ->
+            rectangle.x -= 100 * delta
+        }
+        registerKeyAction(Key.RIGHT) { delta ->
+            rectangle.x += 100 * delta
+        }
+    }
+}
+
 class Stranded : GameAdapter() {
-    private lateinit var block: Rectangle
-    private lateinit var block2: Rectangle
 
     override fun initialize(graphics: Graphics) {
-        TextureManager.loadTexture("GrassBlock.png")
-        TextureManager.loadTexture("Dirt.png")
+        registerEntity(GrassBlock(0f, 0f))
+        registerEntity(GrassBlock(64f, 0f))
+        registerEntity(GrassBlock(128f, 0f))
+        registerEntity(
+            MovingDirt(0f, 64f)
+        )
 
         Camera.initialize(
             yDown = false,
             viewportWidth = graphics.viewportWith,
             viewportHeight = graphics.viewportHeight
-        )
-
-        block = Rectangle(
-            x = 800f / 2f - 64f / 2f,
-            y = 600f / 2f - 64f / 2f,
-            width = 64f,
-            height = 64f,
-        )
-
-        block2 = Rectangle(
-            x = 800f / 3f - 64f / 2f,
-            y = 600f / 3f - 64f / 2f,
-            width = 64f,
-            height = 64f,
         )
     }
 
@@ -43,19 +47,10 @@ class Stranded : GameAdapter() {
         clearScreen()
 
         Camera.update()
-
-        Key.LEFT.ifKeyPressed {
-            block.x -= 200f * delta()
-        }
-        Key.RIGHT.ifKeyPressed {
-            block.x += 200f * delta()
-        }
     }
 
     override fun handleSprites(projectionMatrixFunc: (Matrix4) -> Unit) {
         projectionMatrixFunc(Camera.combined())
-        draw(TextureManager.loadTexture("GrassBlock.png"), block.x, block.y)
-        draw(TextureManager.loadTexture("Dirt.png"), block2.x, block2.y)
     }
 
     override fun dispose() {
