@@ -51,15 +51,11 @@ abstract class GameAdapter : ApplicationAdapter() {
     protected abstract fun handleSprites(projectionMatrixFunc: (Matrix4) -> Unit)
     protected abstract fun initialize(graphics: Graphics)
 
-    protected fun draw(texture: Texture, x: Float, y: Float) {
-        spriteBatch.draw(texture.texture, x, y)
-    }
-
-    protected fun delta() = Gdx.graphics.deltaTime
-
     protected fun registerEntity(entity: Entity) {
         entities.add(entity)
     }
+
+    private fun delta() = Gdx.graphics.deltaTime
 
     private fun escapeToQuitInDebug() {
         debug {
